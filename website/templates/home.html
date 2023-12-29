@@ -1,0 +1,81 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+%}
+<br />
+<h1 align="center">{{ user.first_name }}'s Workouts</h1>
+<form method="POST">
+  <div class="form-group">
+    <label for="exerciseTextarea">Exercise</label>
+    <textarea name="workout" id="workout" class="form-control"></textarea>
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label for="datePicker">Date</label>
+      <input type="date" name="date" id="datePicker" class="form-control" />
+    </div>
+    <div class="form-group col-md-3">
+      <label for="setDropdown">Sets</label>
+      <select name="sets" id="sets" class="form-control">
+        {% for i in range(31) %}
+        <option>{{ i }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group col-md-3">
+      <label for="repsDropdown">Reps</label>
+      <select name="reps" id="reps" class="form-control">
+        {% for i in range(51) %}
+        <option>{{ i }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group col-md-3">
+      <label for="weightDropdown">Weight</label>
+      <select name="weight" id="weight" class="form-control">
+        {% for i in range(0, 501, 5) %}
+        <option>{{ i }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div align="center">
+    <button type="submit" class="btn btn-primary">Add workout</button>
+  </div>
+
+  <script>
+    document.getElementById("datePicker").valueAsDate = new Date();
+  </script>
+</form>
+<br />
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Date</th>
+      <th scope="col">Exercise</th>
+      <th scope="col">Sets</th>
+      <th scope="col">Reps</th>
+      <th scope="col">Weight</th>
+      <th scope="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for workout in user.workouts|sort(reverse=true, attribute='date') %}
+    <tr>
+      <td>{{ workout.date.strftime('%m-%d-%Y') }}</td>
+      <td>{{ workout.exercise }}</td>
+      <td>{{ workout.sets }}</td>
+      <td>{{ workout.reps }}</td>
+      <td>{{ workout.weight }}</td>
+      <td>
+        <button
+          type="button"
+          class="close"
+          onClick="deleteWorkout({{ workout.id }})"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
